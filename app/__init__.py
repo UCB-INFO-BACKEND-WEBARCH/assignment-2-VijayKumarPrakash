@@ -21,13 +21,14 @@ def create_app():
     # Start SQLAlchemy with the app
     db.init_app(app)
     
-    # This part will be coded later after the routes are defined
-    # from app.routes import tasks_bp, categories_bp
-    # app.register_blueprint(tasks_bp)
-    # app.register_blueprint(categories_bp)
-    
     # Create database tables within app context
     with app.app_context():
+        from app.models import Task, Category
         db.create_all()
+    
+    # Register routes
+    from app.routes import tasks, categories
+    tasks.register_routes(app)
+    categories.register_routes(app)
     
     return app

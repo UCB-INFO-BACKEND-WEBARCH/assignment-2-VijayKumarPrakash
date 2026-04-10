@@ -78,7 +78,7 @@ class TestCategoryEndpoints:
     def test_get_categories_with_task_count(self, client, app, sample_category):
         """Test that categories endpoint includes task count."""
         with app.app_context():
-            task = Task(task_name='Test', category_id=sample_category.category_id)
+            task = Task(task_name='Test', category_id=sample_category)
             db.session.add(task)
             db.session.commit()
         
@@ -89,7 +89,7 @@ class TestCategoryEndpoints:
     
     def test_delete_category_without_tasks(self, client, sample_category):
         """Test deleting a category with no tasks."""
-        response = client.delete(f'/categories/{sample_category.category_id}')
+        response = client.delete(f'/categories/{sample_category}')
         assert response.status_code == 200
         data = json.loads(response.data)
         assert data['message'] == 'Category deleted'

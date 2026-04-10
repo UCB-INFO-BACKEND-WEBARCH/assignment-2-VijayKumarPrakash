@@ -6,15 +6,19 @@ import os
 db = SQLAlchemy()
 
 
-def create_app():
+def create_app(config_name=None):
     """
     Creating the Flask app factory function.
     """
     app = Flask(__name__)
     
-    # We fetch the database URL from environment variable
-    database_connection_string = os.getenv('DATABASE_URL')
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_connection_string
+    # Configure database based on environment
+    if config_name == 'testing':
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    else:
+        # We fetch the database URL from environment variable
+        database_connection_string = os.getenv('DATABASE_URL')
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_connection_string
     
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
